@@ -32,3 +32,37 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+#adding dynamic links of CAFFE and dependencies
+
+#caffe
+INCLUDEPATH += /home/onelly/git/quantize_ssd/include /home/onelly/git/quantize_ssd/build/src
+LIBS += -L/home/onelly/git/quantize_ssd/build/lib
+LIBS += -lcaffe
+
+#cuda
+INCLUDEPATH += /usr/local/cuda/include
+LIBS += -L/usr/local/cuda/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib64/stubs
+LIBS += -lcudart -lcublas -lcurand -lnvidia-ml
+
+#opencv
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio -lopencv_features2d
+
+#other
+LIBS += -lglog -lgflags -lprotobuf -lboost_system -lboost_filesystem -lboost_regex -lm -lhdf5_serial_hl -lhdf5_serial
+
+#leveldb
+LIBS += -lleveldb -lsnappy
+
+#lmdb
+LIBS += -llmdb
+
+#linux
+LIBS += -lboost_thread -lstdc++
+
+#cudnn
+LIBS += -lcudnn
+
+#blas
+#LIBS += -latlas
+LIBS += -lopenblas
