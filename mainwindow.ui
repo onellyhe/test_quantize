@@ -101,7 +101,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/liukai/Desktop/Demo/1109_bias_bnmerge.caffemodel</string>
+     <string>/home/onelly/model/1109_withbias_bnmerge.caffemodel</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_prototxt">
@@ -123,7 +123,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/liukai/Desktop/Demo/Vel_Pes_Res18_M1_visp_deploy_bnmerge.prototxt</string>
+     <string>/home/onelly/model/test_bnmerge.prototxt</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Select_model">
@@ -187,7 +187,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/liukai/Desktop/Demo/test_bnmerge.prototxt</string>
+     <string>/home/onelly/model/test_bnmerge.prototxt</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_18">
@@ -219,7 +219,7 @@
    <widget class="QPushButton" name="pushButton">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>30</x>
       <y>590</y>
       <width>89</width>
       <height>25</height>
@@ -232,7 +232,7 @@
    <widget class="QCheckBox" name="checkBox">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>130</x>
       <y>590</y>
       <width>92</width>
       <height>23</height>
@@ -296,12 +296,12 @@
      <rect>
       <x>420</x>
       <y>190</y>
-      <width>67</width>
+      <width>81</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>changed:</string>
+     <string>to change:</string>
     </property>
    </widget>
    <widget class="QListView" name="listView_2">
@@ -330,21 +330,21 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>698</x>
-      <y>550</y>
+      <x>710</x>
+      <y>620</y>
       <width>191</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Quantize And Save As ...</string>
+     <string>Start And Save As ...</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>640</y>
+      <x>30</x>
+      <y>630</y>
       <width>89</width>
       <height>25</height>
      </rect>
@@ -357,9 +357,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>720</y>
-      <width>901</width>
-      <height>211</height>
+      <y>700</y>
+      <width>571</width>
+      <height>251</height>
      </rect>
     </property>
    </widget>
@@ -477,7 +477,7 @@
       <x>590</x>
       <y>291</y>
       <width>231</width>
-      <height>251</height>
+      <height>161</height>
      </rect>
     </property>
    </widget>
@@ -496,13 +496,245 @@
      <rect>
       <x>850</x>
       <y>190</y>
-      <width>67</width>
+      <width>101</width>
       <height>17</height>
      </rect>
     </property>
     <property name="text">
-     <string>list:</string>
+     <string>quantize list:</string>
     </property>
+   </widget>
+   <widget class="QLabel" name="label_10">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>870</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GPU tmpr</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_gname">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>840</y>
+      <width>301</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_16">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>900</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>%</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_gtmpr">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>870</y>
+      <width>61</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_17">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>900</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GPU mem</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_guse">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>930</y>
+      <width>61</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_19">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>870</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>℃</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_22">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>840</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GPU name</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_23">
+    <property name="geometry">
+     <rect>
+      <x>770</x>
+      <y>930</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>%</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_24">
+    <property name="geometry">
+     <rect>
+      <x>830</x>
+      <y>890</y>
+      <width>171</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>15</pointsize>
+     </font>
+    </property>
+    <property name="layoutDirection">
+     <enum>Qt::LeftToRight</enum>
+    </property>
+    <property name="autoFillBackground">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string>GPU Infomation</string>
+    </property>
+    <property name="textFormat">
+     <enum>Qt::AutoText</enum>
+    </property>
+    <property name="scaledContents">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit_gmem">
+    <property name="enabled">
+     <bool>false</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>900</y>
+      <width>61</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_26">
+    <property name="geometry">
+     <rect>
+      <x>600</x>
+      <y>930</y>
+      <width>81</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>GPU use</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="comboBox">
+    <property name="geometry">
+     <rect>
+      <x>590</x>
+      <y>470</y>
+      <width>111</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>8</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>16</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>4</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>2</string>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </item>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
