@@ -22,6 +22,8 @@ public:
     float  map_zhi;
     Ui::MainWindow * ui;
 
+private slots:
+    void on_pushButton_2_clicked();
 };
 
 class MainWindow : public QMainWindow

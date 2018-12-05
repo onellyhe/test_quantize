@@ -115,3 +115,10 @@ int MainWindow::GetGPUInfo()
 
     return 0;
 }
+
+void mAP_cal::on_pushButton_2_clicked()
+{
+    Caffe::SetDevice(0);
+    Caffe::set_mode(Caffe::GPU);
+
+}

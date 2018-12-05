@@ -259,6 +259,7 @@ void * mAP_calc(void* arg)
      // map_c = 0;
      // std::cout<<mAP<<std::endl;
       //return ((void*)1);
+
 //      map_c->ui->mAP->setText("mAP");
 //      map_c->ui->map_label->setText(QString::number(float(int(mAP*10000))/10000));
 //      map_c->ui->Detect_video->setEnabled(true);
