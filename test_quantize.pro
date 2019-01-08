@@ -50,7 +50,7 @@ LIBS += -L/usr/local/cuda/lib -L/usr/local/cuda/lib64 -L/usr/local/cuda/lib64/st
 LIBS += -lcudart -lcublas -lcurand -lnvidia-ml
 
 #opencv
-LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_imgcodecs -lopencv_videoio -lopencv_features2d
+LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_features2d# -lopencv_imgcodecs -lopencv_videoio
 
 #other
 LIBS += -lglog -lgflags -lprotobuf -lboost_system -lboost_filesystem -lboost_regex -lm -lhdf5_serial_hl -lhdf5_serial

@@ -13,18 +13,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class mAP_cal
-{
-public:
-    //shared_ptr<Net<float> > net_;
-    Net<float> *net_;
 
-    float  map_zhi;
-    Ui::MainWindow * ui;
-
-private slots:
-    void on_pushButton_2_clicked();
-};
 
 class MainWindow : public QMainWindow
 {
@@ -43,6 +32,19 @@ private:
 
 public slots:
     int GetGPUInfo();
+    void on_pushButton_2_clicked();
+};
+
+
+class mAP_cal
+{
+public:
+    //shared_ptr<Net<float> > net_;
+    Net<float> *net_;
+
+    float  map_zhi;
+    Ui::MainWindow * ui;
+
 };
 
 #endif // MAINWINDOW_H
