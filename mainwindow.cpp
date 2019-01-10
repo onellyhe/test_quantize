@@ -208,15 +208,18 @@ void MainWindow::on_pushButton_2_clicked()
     //重新载入权值
         //net_train = new Net<float>(netparam, NULL);
         //net_train->CopyTrainedLayersFrom(weights);
-    //输出网络的
+    //输出网络每层的in,out,param
 //    for(int i=0;i<layer_name.size();i++){
 //      std::cout<< layer_name[i]<<"\t"<< in[i] << "\t"
 //            << out[i] << "\t" << param[i] << std::endl;
 //    }
+    //输出loss
 //    std::cout << "temp_loss: " << temp_loss << std::endl;
+    //输出网络名称和类型
 //    for(int i=0;i<10;i++){
 //      std::cout<<"name of layer "<<i<<": "<<net_train->layers()[i]->type()<<std::endl;
 //    }
+    //输出所有il
 //    for (int k = 0; k < layer_name.size(); ++k) {
 //    LOG(INFO) << "Layer " << layer_name[k] <<
 //        ", integer length input=" << il_in[k] <<
@@ -225,6 +228,7 @@ void MainWindow::on_pushButton_2_clicked()
 //        ", integer conv_id=" << conv_id[k];
 //    }
 //    layer_name.clear();
+    //重新进行范围统计
 //    for(int i=0;i<onelly_iter;i++){
 //        net_train->Forward(&temp_loss);
 //        net_train->RangeInLayers(&layer_name,&in,&out,&param);
@@ -237,6 +241,6 @@ void MainWindow::on_pushButton_2_clicked()
 
 
 
-    return 0;
+    //return 0;
 
 }
