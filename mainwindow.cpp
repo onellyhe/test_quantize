@@ -16,10 +16,19 @@ MainWindow::MainWindow(QWidget *parent) :
     timer = new QTimer();
     connect(timer,SIGNAL(timeout()),this,SLOT(GetGPUInfo()));
     timer->start(500);
+
+    ui->layerList1->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui->layerList2->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+
 }
 
 MainWindow::~MainWindow()
 {
+    for(int i=0;i<layers1.size();i++)
+        delete layers1[i];
+    for(int i=0;i<layers2.size();i++)
+        delete layers2[i];
     delete ui;
 }
 
@@ -118,19 +127,22 @@ int MainWindow::GetGPUInfo()
 
 void MainWindow::on_pushButton_2_clicked()
 {
+    strList1.clear();
+    strList2.clear();
     Caffe::SetDevice(0);
     Caffe::set_mode(Caffe::GPU);
 
-    std::string model = "/home/onelly/model/test_bnmerge.prototxt";
-    std::string weights = "/home/onelly/model/1109_bias_bnmerge.caffemodel";
+    std::string model = "/home/onelly/model/SSD_ResNet/test1_openbn.prototxt";
+    std::string weights = "/home/onelly/model/SSD_ResNet/temp_voc.caffemodel";
     //std::string out_directory = "/home/onelly/model/Res18_SSD_1108/outdata";
 
-    std::vector<std::string> layer_name;
-    std::vector<float> in;
-    std::vector<float> out;
-    std::vector<float> param;
-    std::vector<int> il_in, il_params, il_out;
-    std::vector<int> conv_id;
+    std::vector<std::string> layer_name;//层名记录
+    std::vector<float> in;//层输入绝对值最大值
+    std::vector<float> out;//层输入绝对值最大值
+    std::vector<float> param;//权值绝对值最大值
+//    std::vector<int> il_in, il_params, il_out;//输入、权值、输出的il值
+    std::vector<int> layer_id;//层名对应层号
+    std::vector<LayerInfo::LayerType> types;//类型
     int temp;
     //第一步init Network载入网络
     //std::shared_ptr< Net<float> > net_train;
@@ -159,88 +171,91 @@ void MainWindow::on_pushButton_2_clicked()
         temp_net->Forward(&temp_loss);
         temp_net->RangeInLayers(&layer_name,&in,&out,&param);
     }
-    //第四步push back il按照顺序将il值压入vector中。
-    for (int i = 0; i < layer_name.size(); ++i) {
-    il_in.push_back((int)ceil(log2(in[i])));
-    il_out.push_back((int)ceil(log2(out[i])));
-    il_params.push_back((int)ceil(log2(param[i])+1));
-    }
-    //第四点五步find layerID找到layer_name中对应的layerID
+//    //第四步push back il按照顺序将il值压入vector中。
+//    for (int i = 0; i < layer_name.size(); ++i) {
+//        il_in.push_back((int)ceil(log2(in[i])));
+//        il_out.push_back((int)ceil(log2(out[i])));
+//        il_params.push_back((int)ceil(log2(param[i])+1));
+//    }
+    //第五步find layerID找到layer_name中对应的layerID,对应找到层的类型
     for(int i = 0; i < layer_name.size(); ++i){
       for(int j = 0; j< netparam.layer_size();++j){
           if( netparam.layer(j).name()==layer_name[i]){
-              conv_id.push_back(j);
+              layer_id.push_back(j);
+              LayerParameter* lp = netparam.mutable_layer(j);
+
+              if(strcmp(lp->type().c_str(), "Convolution") == 0){
+                  types.push_back(LayerInfo::LayerType::CONVOLUTION);
+              }else if(strcmp(lp->type().c_str(), "ConvolutionRistretto") == 0){
+                  types.push_back(LayerInfo::LayerType::CONV_RISTRETTO);
+              }else if(strcmp(lp->type().c_str(), "InnerProduct") == 0){
+                  types.push_back(LayerInfo::LayerType::FULLCONNECTION);
+              }else {
+                  types.push_back(LayerInfo::LayerType::FC_RISTRETTO);
+              }
           }
       }
     }
-        // for (int i = 0; i < param->layer_size(); ++i){
-        //     if ( param->layer(i).type() == "Convolution"){
-        //         std::cout<<param->layer(i).name()<<": "<<i<<std::endl;
-        //     }
-        // }
-    //输出层的名字（暂时前十层）
-    for(int i=0;i<10;i++){
-      std::cout<<"name of layer "<<i<<": "<<temp_net->layers()[i]->type()<<std::endl;
+    //删除网络
+    delete temp_net;
+    //第六步放到layerinfo类内。1.neme,type;2.il;3.type;4.bit-wide
+    for(int i=0;i<layer_name.size();++i)
+    {
+        LayerInfo *tempLI = new LayerInfo(layer_name[i],types[i]);
+        tempLI->setIl(in[i],out[i],param[i]);
+        tempLI->layerID = layer_id[i];
+        //tempLI->setBitWide(16);
+        layers1.push_back(tempLI);
     }
-    for (int k = 0; k < layer_name.size(); ++k) {
-    LOG(INFO) << "Layer " << layer_name[k] <<
-        ", integer length input=" << il_in[k] <<
-        ", integer length output=" << il_out[k] <<
-        ", integer length parameters=" << il_params[k]<<
-        ", integer conv_id=" << conv_id[k];
+    //第七步更新界面
+    this->refreshList1();
+}
+
+
+void MainWindow::refreshList1(){
+
+
+    strList1.clear();
+    for(int i=0;i<layers1.size();i++){
+        QString temp;
+        temp.append(QString::number(i));
+        temp.append(" ");
+        temp.append(QString::fromStdString(layers1[i]->layerName));
+        strList1.append(temp);
     }
+    model1 = new QStringListModel(strList1);
+    ui->layerList1->setModel(model1);
 
+    model2 = new QStringListModel(strList2);
+    ui->layerList2->setModel(model2);
+}
 
-    //onelly TODO: delete net
-    //delete &*net_train;
-    //net_train.reset();
+void MainWindow::on_layerList1_doubleClicked(const QModelIndex &index)
+{
 
+    int current;
+    current = index.row();
+    //qDebug()<<index.row()<<" "<<index.data();
+    ui->layerID1->setText(QString::number(layers1[current]->layerID));
+    ui->layerName1->setText(QString::fromStdString(layers1[current]->layerName));
 
-    //第五步trans a single layer to ristretto，将某层转换为ristretto层
-    //EditConvolution2DynamicFixedPoint(&netparam, il_in, il_params, il_out, conv_id,0,8);
-    //   if (Caffe::root_solver()) {
-    //     net_train.reset(new Net<float>(netparam));
-    //   } else {
-    //重新载入网络
-    //net_train.reset(new Net<float>(netparam));
-    //net_train->CopyTrainedLayersFrom(netparam);
-    //   }
-    //重新载入权值
-        //net_train = new Net<float>(netparam, NULL);
-        //net_train->CopyTrainedLayersFrom(weights);
-    //输出网络每层的in,out,param
-//    for(int i=0;i<layer_name.size();i++){
-//      std::cout<< layer_name[i]<<"\t"<< in[i] << "\t"
-//            << out[i] << "\t" << param[i] << std::endl;
-//    }
-    //输出loss
-//    std::cout << "temp_loss: " << temp_loss << std::endl;
-    //输出网络名称和类型
-//    for(int i=0;i<10;i++){
-//      std::cout<<"name of layer "<<i<<": "<<net_train->layers()[i]->type()<<std::endl;
-//    }
-    //输出所有il
-//    for (int k = 0; k < layer_name.size(); ++k) {
-//    LOG(INFO) << "Layer " << layer_name[k] <<
-//        ", integer length input=" << il_in[k] <<
-//        ", integer length output=" << il_out[k] <<
-//        ", integer length parameters=" << il_params[k]<<
-//        ", integer conv_id=" << conv_id[k];
-//    }
-//    layer_name.clear();
-    //重新进行范围统计
-//    for(int i=0;i<onelly_iter;i++){
-//        net_train->Forward(&temp_loss);
-//        net_train->RangeInLayers(&layer_name,&in,&out,&param);
-//    }
+    ui->layerDetails1->clear();
+    ui->layerDetails1->append("type: "+QString::fromStdString(layers1[current]->getTypeName()));
+    ui->layerDetails1->append("inMaxabs: "+QString::number(layers1[current]->inMaxabs));
+    ui->layerDetails1->append("outMaxabs: "+QString::number(layers1[current]->outMaxabs));
+    ui->layerDetails1->append("paramMaxabs: "+QString::number(layers1[current]->paramMaxabs));
+    ui->layerDetails1->append("inIl: "+QString::number(layers1[current]->inIl));
+    ui->layerDetails1->append("outIl: "+QString::number(layers1[current]->outIl));
+    ui->layerDetails1->append("paramIl: "+QString::number(layers1[current]->paramIl));
 
-//    for(int i=0;i<layer_name.size();i++){
-//        std::cout<< layer_name[i]<<"\t"<< in[i] << "\t"
-//            << out[i] << "\t" << param[i] << std::endl;
-//    }
+}
 
+void MainWindow::on_pushButton_5_clicked()
+{
+    const QModelIndex &index = ui->layerList1->currentIndex();
+    //qDebug()<<index.row();
+    if(index.row() <= 0)return;
+    //LayerInfo temp =
 
-
-    //return 0;
 
 }

@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     detector.cpp \
-    map.cpp
+    map.cpp \
+    layerinfo.cpp
 
 HEADERS += \
         mainwindow.h \
     detector.h \
-    map.h
+    map.h \
+    layerinfo.h
 
 FORMS += \
         mainwindow.ui

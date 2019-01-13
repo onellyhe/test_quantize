@@ -7,7 +7,13 @@
 #include <nvml.h>
 #include <QTimer>
 #include <detector.h>
+#include <layerinfo.h>
+#include <vector>
+#include <QStringListModel>
+#include <QListView>
 using namespace caffe;
+
+#include <QDebug>
 
 namespace Ui {
 class MainWindow;
@@ -29,10 +35,21 @@ public:    explicit MainWindow(QWidget *parent = 0);
 private:
     Ui::MainWindow *ui;
     QTimer  *timer;
+    std::vector<LayerInfo*> layers1;
+    std::vector<LayerInfo*> layers2;
+    void refreshList1();
+    void refreshList2();
+    QStringList strList1;
+    QStringListModel *model1 = NULL;
+    QStringList strList2;
+    QStringListModel *model2 = NULL;
 
 public slots:
     int GetGPUInfo();
     void on_pushButton_2_clicked();
+private slots:
+    void on_layerList1_doubleClicked(const QModelIndex &index);
+    void on_pushButton_5_clicked();
 };
 
 
