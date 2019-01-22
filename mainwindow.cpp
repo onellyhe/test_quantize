@@ -209,6 +209,7 @@ void MainWindow::on_pushButton_2_clicked()
     }
     //第七步更新界面
     this->refreshList1();
+    this->refreshList2();
 }
 
 
@@ -225,9 +226,20 @@ void MainWindow::refreshList1(){
     }
     model1 = new QStringListModel(strList1);
     ui->layerList1->setModel(model1);
+}
 
+void MainWindow::refreshList2(){
+    strList2.clear();
+    for(int i=0;i<layers2.size();i++){
+        QString temp;
+        temp.append(QString::number(i));
+        temp.append(" ");
+        temp.append(QString::fromStdString(layers2[i]->layerName));
+        strList2.append(temp);
+    }
     model2 = new QStringListModel(strList2);
     ui->layerList2->setModel(model2);
+
 }
 
 void MainWindow::on_layerList1_doubleClicked(const QModelIndex &index)
@@ -235,6 +247,20 @@ void MainWindow::on_layerList1_doubleClicked(const QModelIndex &index)
 
     int current;
     current = index.row();
+    showList1(current);
+
+    for(int i=0;i<this->layers2.size();i++){
+        if(layers2[i]->layerID==layers1[current]->layerID)
+        {
+            //TODO 将List2设置为选中第i项
+            ui->layerList2->
+            showList2(current);
+        }
+    }
+}
+
+void MainWindow::showList1(int current)
+{
     //qDebug()<<index.row()<<" "<<index.data();
     ui->layerID1->setText(QString::number(layers1[current]->layerID));
     ui->layerName1->setText(QString::fromStdString(layers1[current]->layerName));
@@ -247,7 +273,23 @@ void MainWindow::on_layerList1_doubleClicked(const QModelIndex &index)
     ui->layerDetails1->append("inIl: "+QString::number(layers1[current]->inIl));
     ui->layerDetails1->append("outIl: "+QString::number(layers1[current]->outIl));
     ui->layerDetails1->append("paramIl: "+QString::number(layers1[current]->paramIl));
+}
 
+void MainWindow::showList2(int current)
+{
+    //qDebug()<<index.row()<<" "<<index.data();
+    //ui->layerID1->setText(QString::number(layers1[current]->layerID));
+    //ui->layerName1->setText(QString::fromStdString(layers1[current]->layerName));
+    //TODO 将id，name打印到Details2中
+
+    ui->layerDetails2->clear();
+    ui->layerDetails2->append("type: "+QString::fromStdString(layers2[current]->getTypeName()));
+    ui->layerDetails2->append("inMaxabs: "+QString::number(layers2[current]->inMaxabs));
+    ui->layerDetails2->append("outMaxabs: "+QString::number(layers2[current]->outMaxabs));
+    ui->layerDetails2->append("paramMaxabs: "+QString::number(layers2[current]->paramMaxabs));
+    ui->layerDetails2->append("inIl: "+QString::number(layers2[current]->inIl));
+    ui->layerDetails2->append("outIl: "+QString::number(layers2[current]->outIl));
+    ui->layerDetails2->append("paramIl: "+QString::number(layers2[current]->paramIl));
 }
 
 void MainWindow::on_pushButton_5_clicked()
@@ -256,6 +298,8 @@ void MainWindow::on_pushButton_5_clicked()
     //qDebug()<<index.row();
     if(index.row() <= 0)return;
     //LayerInfo temp =
+    //TODO 将layer添加到Layers2中，并且根据已经设置的layername和选择的bite数修改该层
+    //TODO 添加一个函数，输入：需要添加到layers2中的layers1的vector序号，比特数，层名。返回值：layers2中的vector序号。功能：添加层到列表中
 
 
 }

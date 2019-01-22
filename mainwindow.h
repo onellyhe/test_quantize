@@ -43,6 +43,8 @@ private:
     QStringListModel *model1 = NULL;
     QStringList strList2;
     QStringListModel *model2 = NULL;
+    void showList1(int current);
+    void showList2(int current);
 
 public slots:
     int GetGPUInfo();
