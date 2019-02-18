@@ -129,11 +129,23 @@ void MainWindow::on_pushButton_2_clicked()
 {
     strList1.clear();
     strList2.clear();
+    for(int i=0;i<layers1.size();i++)
+        delete layers1[i];
+    for(int i=0;i<layers2.size();i++)
+        delete layers2[i];
+    layers1.clear();
+    layers2.clear();
+    ui->layerDetails1->clear();
+    ui->layerDetails2->clear();
+    ui->layerID1->clear();
+    ui->layerName1->clear();
+
+
     Caffe::SetDevice(0);
     Caffe::set_mode(Caffe::GPU);
 
-    std::string model = "/home/onelly/model/SSD_ResNet/test1_openbn.prototxt";
-    std::string weights = "/home/onelly/model/SSD_ResNet/temp_voc.caffemodel";
+    std::string model = "/home/onelly/model/SSD_ResNet/test_bnmerge.prototxt";
+    std::string weights = "/home/onelly/model/SSD_ResNet/1109_bias_bnmerge.caffemodel";
     //std::string out_directory = "/home/onelly/model/Res18_SSD_1108/outdata";
 
     std::vector<std::string> layer_name;//层名记录
@@ -248,16 +260,51 @@ void MainWindow::on_layerList1_doubleClicked(const QModelIndex &index)
     int current;
     current = index.row();
     showList1(current);
-
-    for(int i=0;i<this->layers2.size();i++){
+    int i=0;
+    for(;i<this->layers2.size();i++){
         if(layers2[i]->layerID==layers1[current]->layerID)
         {
-            //TODO 将List2设置为选中第i项
-            ui->layerList2->
-            showList2(current);
+            //设置选中在2中找到的层
+            QModelIndex index2 = model2->index(i);
+            ui->layerList2->setCurrentIndex(index2);
+            //ui->layerList2->selectionModel()->setCurrentIndex(index2,QItemSelectionModel::Select);
+            showList2(i);
+            break;
         }
     }
+    //当未找到时设置为非选中
+    if(i==layers2.size()){
+        qDebug()<<"i:"<<i<<" layers2.size:"<<layers2.size();
+        QModelIndex index2 = model2->index(-1);
+        ui->layerList2->setCurrentIndex(index2);
+    }
 }
+
+void MainWindow::on_layerList2_doubleClicked(const QModelIndex &index)
+{
+    int current;
+    current = index.row();
+    showList2(current);
+    int i=0;
+    for(;i<this->layers1.size();i++){
+        if(layers1[i]->layerID==layers2[current]->layerID)
+        {
+            //TODO 将List1设置为选中第i项
+            QModelIndex index1 = model1->index(i);
+            ui->layerList1->setCurrentIndex(index1);
+            //ui->layerList2->selectionModel()->setCurrentIndex(index2,QItemSelectionModel::Select);
+            showList1(i);
+            break;
+        }
+    }
+//2中出现的层肯定能在1中找到原层
+//    if(i==layers1.size()){
+//        qDebug()<<"i:"<<i<<" layers1.size:"<<layers1.size();
+//        QModelIndex index1 = model1->index(-1);
+//        ui->layerList1->setCurrentIndex(index1);
+//    }
+}
+
 
 void MainWindow::showList1(int current)
 {
@@ -292,14 +339,40 @@ void MainWindow::showList2(int current)
     ui->layerDetails2->append("paramIl: "+QString::number(layers2[current]->paramIl));
 }
 
-void MainWindow::on_pushButton_5_clicked()
+void MainWindow::on_pushButton_5_clicked()//select layer button
 {
     const QModelIndex &index = ui->layerList1->currentIndex();
-    //qDebug()<<index.row();
+    qDebug()<<index.row();
     if(index.row() <= 0)return;
-    //LayerInfo temp =
-    //TODO 将layer添加到Layers2中，并且根据已经设置的layername和选择的bite数修改该层
-    //TODO 添加一个函数，输入：需要添加到layers2中的layers1的vector序号，比特数，层名。返回值：layers2中的vector序号。功能：添加层到列表中
+    //构造一个新的LayerInfo并添加bit数，还要改层名，层类型
+    LayerInfo* temp = new LayerInfo(*layers1[index.row()]);
+    temp->bitWide = this->ui->BWSelect->currentText().toInt();
+    std::string lname = temp->layerName;
+    if(temp->layerType == LayerInfo::CONVOLUTION||temp->layerType == LayerInfo::FULLCONNECTION)
+        temp->layerName = lname+"_ris"+std::to_string(temp->bitWide);
+    temp->toRistrettoType();
 
+    int ind = 0;
+    for(;ind<layers2.size();ind++){
+        if(layers1[index.row()]->layerID==layers2[ind]->layerID)
+            break;
+    }
+    if(ind==layers2.size()){
+        layers2.push_back(temp);
+    }else{
+        LayerInfo* toDel = layers2[ind];
+        delete toDel;
+        layers2[ind] = temp;
+    }
+    refreshList2();
+    QModelIndex index2 = model2->index(ind);
+    ui->layerList2->setCurrentIndex(index2);
+    showList2(ind);
+
+}
+
+
+void MainWindow::on_Select_prototxt_clicked()
+{
 
 }

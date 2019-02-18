@@ -23,6 +23,7 @@ public:
     LayerInfo(const LayerInfo &org);
     void setIl(float inMaxabs,float outMaxabs,float paramMaxabs);
     std::string getTypeName();
+    void toRistrettoType();
 
     std::string layerName;
     LayerType layerType;

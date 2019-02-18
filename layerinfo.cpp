@@ -34,3 +34,11 @@ std::string LayerInfo::getTypeName()
     }
     return result;
 }
+
+void LayerInfo::toRistrettoType(){
+    switch(layerType){
+        case CONVOLUTION:layerType = CONV_RISTRETTO;break;
+        case FULLCONNECTION:layerType = FC_RISTRETTO;break;
+        default:;
+    }
+}

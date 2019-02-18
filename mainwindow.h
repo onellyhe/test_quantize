@@ -52,6 +52,8 @@ public slots:
 private slots:
     void on_layerList1_doubleClicked(const QModelIndex &index);
     void on_pushButton_5_clicked();
+    void on_layerList2_doubleClicked(const QModelIndex &index);
+    void on_Select_prototxt_clicked();
 };
 
 
