@@ -101,7 +101,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/onelly/model/SSD_ResNet/1109_bias_bnmerge.caffemodel</string>
+     <string>/home/onelly/model/SSD_ResNet/temp_voc.caffemodel</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_prototxt">
@@ -123,7 +123,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/onelly/model/SSD_ResNet/test_bnmerge.prototxt</string>
+     <string>/home/onelly/model/SSD_ResNet/test1_openbn.prototxt</string>
     </property>
    </widget>
    <widget class="QPushButton" name="Select_model">
@@ -187,7 +187,7 @@
      </sizepolicy>
     </property>
     <property name="text">
-     <string>/home/onelly/model/SSD_ResNet/test_bnmerge.prototxt</string>
+     <string>/home/onelly/model/SSD_ResNet/quantized_Net</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_18">
@@ -307,14 +307,14 @@
    <widget class="QPushButton" name="pushButton_3">
     <property name="geometry">
      <rect>
-      <x>680</x>
+      <x>490</x>
       <y>560</y>
-      <width>191</width>
+      <width>181</width>
       <height>25</height>
      </rect>
     </property>
     <property name="text">
-     <string>Start And Save As ...</string>
+     <string>Start And Save As Name:</string>
     </property>
    </widget>
    <widget class="QPushButton" name="pushButton_4">
@@ -675,6 +675,19 @@
     </property>
     <property name="text">
      <string>select</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="lineEdit">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>560</y>
+      <width>231</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>test1</string>
     </property>
    </widget>
   </widget>

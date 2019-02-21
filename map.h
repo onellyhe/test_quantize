@@ -16,21 +16,24 @@
 #include <vector>
 #include <map>
 #include <iostream>
-#include <mainwindow.h>
-#include <QMainWindow>
-namespace Ui {
-class MainWindow;
-}
-/*
+//#include <mainwindow.h>
+//#include <QMainWindow>
+using namespace caffe;
+
 class mAP_cal
 {
 public:
-    shared_ptr<Net<float> > net_;
-    float  map_zhi;
-    Ui::MainWindow * ui;
+    mAP_cal(string model,string weights);
+    ~mAP_cal();
+    string model;
+    string weights;
+    Net<float>* net_ = NULL;
+    float  map_zhi = 0.0;
+    //Ui::MainWindow * ui;
+    void  mAP_calc();
 
 };
-*/
+
 template <typename T>
 bool SortScorePairDescend(const pair<float, T>& pair1, const pair<float, T>& pair2);
 void CumSum(const vector<pair<float, int> >& pairs, vector<int>* cumsum);
@@ -38,6 +41,6 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
                const vector<pair<float, int> >& fp, const string ap_version,
                vector<float>* prec, vector<float>* rec, float* ap);
 //float mAP_calc(shared_ptr<Net<float> > net_);
-void * mAP_calc(void *arg);
+
 //extern shared_ptr<Net<float> > net_;
 #endif // MAP_H

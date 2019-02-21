@@ -1,4 +1,4 @@
-#include "ui_mainwindow.h"
+#include "map.h"
 #include <mainwindow.h>
 #include <caffe/caffe.hpp>
 #define USE_OPENCV
@@ -141,12 +141,12 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
   }
 }
 //float mAP_calc(shared_ptr<Net<float> > net_)
-void * mAP_calc(void* arg)
+void  mAP_cal::mAP_calc()
 {
       //shared_ptr<Net<float> > net_;//
 //      shared_ptr<Net<float> > net_ = (Net<float>*)( arg);
       //shared_ptr<Net<float> > net_ = * net1_;
-      mAP_cal * map_c =  (mAP_cal *) (arg);
+      //mAP_cal * map_c =  (mAP_cal *) (arg);
       //shared_ptr<Net<float> > net_;
       map<int, map<int, vector<pair<float, int> > > > all_true_pos;
       map<int, map<int, vector<pair<float, int> > > > all_false_pos;
@@ -155,7 +155,7 @@ void * mAP_calc(void* arg)
      // net_->CopyTrainedLayersFrom("/home/zhao/ssd/caffe/data/123/_iter_500000.caffemodel");///home/zhao/ssd/caffe/data/123/_iter_500000.caffemodel /home/zhao/ssd/caffe/data/SSD_300x300/VGG_VOC0712_SSD_300x300_iter_120000.caffemodel
       Caffe::set_mode(Caffe::GPU);
       //net_->Forward();
-      vector<Blob<float>*> result = (*map_c).net_->output_blobs();
+      vector<Blob<float>*> result = net_->output_blobs();
       std::cout<<result.size()<<std::endl;
       //const float* result = result_blob->cpu_data();
       //const int num_det = result_blob->height();
@@ -164,7 +164,7 @@ void * mAP_calc(void* arg)
       float mAP;
       for(int i= 0;i<terms;i++)
       {
-      (*map_c).net_->Forward();
+      net_->Forward();
       for (int j = 0; j < result.size(); ++j) {
           CHECK_EQ(result[j]->width(), 5);
           //std::cout<<result[j]->width()<<std::endl;//验证得到输出的结果是5
@@ -240,8 +240,8 @@ void * mAP_calc(void* arg)
         }
         mAP /= num_pos.size();
         std::cout<<mAP<<std::endl;
-        const int output_blob_index = (*map_c).net_->output_blob_indices()[i];
-        const string& output_name = (*map_c).net_->blob_names()[output_blob_index];
+        const int output_blob_index = net_->output_blob_indices()[i];
+        const string& output_name = net_->blob_names()[output_blob_index];
         std::cout << "    Test net output #" << i << ": " << output_name << " = "
                   << mAP<<std::endl;
 
@@ -249,7 +249,7 @@ void * mAP_calc(void* arg)
       mAPs = mAPs + mAP;
       }
       mAP = mAPs/(float)terms;
-      (* map_c).map_zhi =  mAP;
+      map_zhi =  mAP;
       char c[10];
       //float mAP =  map_c.map_zhi;
       int length = sprintf(c, "%lf", mAP);

@@ -125,6 +125,44 @@ int MainWindow::GetGPUInfo()
     return 0;
 }
 
+NetParameter MainWindow::EditConvolution2DynamicFixedPoint() {
+
+        // for (int i = 0; i < param->layer_size(); ++i){
+        //     if ( param->layer(i).type() == "Convolution"){
+        //         std::cout<<param->layer(i).name()<<": "<<i<<std::endl;
+        //     }
+        // }
+
+    //第一步init Network载入网络
+    Net<float>* temp_net = new Net<float>(model, caffe::TEST);
+    int temp = 1;
+    temp_net->CopyTrainedLayersFrom(weights);
+
+    NetParameter netparam;
+    temp_net->ToProto(&netparam,false);//为了进行网络改动，必须要将现有网络先记录到param中。
+    for(int i=0;i<layers2.size();i++){
+        LayerParameter* param_layer = netparam.mutable_layer(layers2[i]->layerID);
+
+        param_layer->set_name(layers2[i]->layerName);
+        param_layer->set_type(layers2[i]->getTypeName());
+        //param
+        param_layer->mutable_quantization_param()->set_fl_params(layers2[i]->bitWide -
+            layers2[i]->paramIl);
+        param_layer->mutable_quantization_param()->set_bw_params(layers2[i]->bitWide);
+        //in
+        param_layer->mutable_quantization_param()->set_fl_layer_in(layers2[i]->bitWide -
+            layers2[i]->inIl);
+        param_layer->mutable_quantization_param()->set_bw_layer_in(layers2[i]->bitWide);
+        //out
+        param_layer->mutable_quantization_param()->set_fl_layer_out(layers2[i]->bitWide -
+            layers2[i]->outIl);
+        param_layer->mutable_quantization_param()->set_bw_layer_out(layers2[i]->bitWide);
+    }
+    return netparam;
+}
+
+//========================================================================================================
+
 void MainWindow::on_pushButton_2_clicked()
 {
     strList1.clear();
@@ -144,9 +182,6 @@ void MainWindow::on_pushButton_2_clicked()
     Caffe::SetDevice(0);
     Caffe::set_mode(Caffe::GPU);
 
-    std::string model = "/home/onelly/model/SSD_ResNet/test_bnmerge.prototxt";
-    std::string weights = "/home/onelly/model/SSD_ResNet/1109_bias_bnmerge.caffemodel";
-    //std::string out_directory = "/home/onelly/model/Res18_SSD_1108/outdata";
 
     std::vector<std::string> layer_name;//层名记录
     std::vector<float> in;//层输入绝对值最大值
@@ -375,4 +410,13 @@ void MainWindow::on_pushButton_5_clicked()//select layer button
 void MainWindow::on_Select_prototxt_clicked()
 {
 
+}
+
+void MainWindow::on_pushButton_3_clicked()
+{
+    //第一步 构造网络
+    NetParameter netparam = EditConvolution2DynamicFixedPoint();
+    //第二步 计算mAp
+
+    //第三步 输出模型
 }
