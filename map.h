@@ -23,10 +23,13 @@ using namespace caffe;
 class mAP_cal
 {
 public:
-    mAP_cal(string model,string weights);
-    ~mAP_cal();
-    string model;
-    string weights;
+    explicit mAP_cal(NetParameter netparam,std::string weights);
+    ~mAP_cal(){
+
+    }
+    //string model = "";
+    NetParameter netparam;
+    std::string weights = "";
     Net<float>* net_ = NULL;
     float  map_zhi = 0.0;
     //Ui::MainWindow * ui;

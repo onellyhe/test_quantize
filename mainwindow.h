@@ -11,6 +11,7 @@
 #include <vector>
 #include <QStringListModel>
 #include <QListView>
+#include "map.h"
 using namespace caffe;
 
 #include <QDebug>
@@ -48,6 +49,7 @@ private:
     std::string model = "/home/onelly/model/SSD_ResNet/test1_openbn.prototxt";
     std::string weights = "/home/onelly/model/SSD_ResNet/temp_voc.caffemodel";
     std::string out_directory = "/home/onelly/model/SSD_ResNet/quantized_Net";
+    mAP_cal *map_cal = NULL;
 
 public slots:
     int GetGPUInfo();

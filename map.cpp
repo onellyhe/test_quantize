@@ -18,7 +18,7 @@
 #include <iostream>
 
 
-using namespace caffe;
+
 #define CHECK_EQ(val1, val2) CHECK_OP(_EQ, ==, val1, val2)
 #define CHECK_NE(val1, val2) CHECK_OP(_NE, !=, val1, val2)
 #define CHECK_LE(val1, val2) CHECK_OP(_LE, <=, val1, val2)
@@ -140,6 +140,13 @@ void ComputeAP(const vector<pair<float, int> >& tp, const int num_pos,
     std::cout << "Unknown ap_version: " << ap_version;
   }
 }
+
+mAP_cal::mAP_cal(NetParameter netparam,std::string weights):netparam(netparam),weights(weights){
+    std::cout<<"term:"<<std::endl;
+}
+
+
+
 //float mAP_calc(shared_ptr<Net<float> > net_)
 void  mAP_cal::mAP_calc()
 {
@@ -148,6 +155,13 @@ void  mAP_cal::mAP_calc()
       //shared_ptr<Net<float> > net_ = * net1_;
       //mAP_cal * map_c =  (mAP_cal *) (arg);
       //shared_ptr<Net<float> > net_;
+
+    net_ = new Net<float>(netparam,NULL);//从model_file中读取网络结构，初始化网络
+
+    std::cout<<"create successful"<<std::endl;
+    net_->CopyTrainedLayersFrom(netparam);
+    //net_->CopyTrainedLayersFrom(weights);//从权值文件中读取网络参数，初始化net_
+    std::cout<<"load weights successful"<<std::endl;
       map<int, map<int, vector<pair<float, int> > > > all_true_pos;
       map<int, map<int, vector<pair<float, int> > > > all_false_pos;
       map<int, map<int, int> > all_num_pos;
@@ -164,6 +178,7 @@ void  mAP_cal::mAP_calc()
       float mAP;
       for(int i= 0;i<terms;i++)
       {
+          std::cout<<"term:"<<i<<std::endl;
       net_->Forward();
       for (int j = 0; j < result.size(); ++j) {
           CHECK_EQ(result[j]->width(), 5);

@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    if(map_cal != NULL){
+        delete map_cal;
+        map_cal = NULL;
+    }
     for(int i=0;i<layers1.size();i++)
         delete layers1[i];
     for(int i=0;i<layers2.size();i++)
@@ -416,7 +420,10 @@ void MainWindow::on_pushButton_3_clicked()
 {
     //第一步 构造网络
     NetParameter netparam = EditConvolution2DynamicFixedPoint();
+    netparam.mutable_state()->set_phase(caffe::TEST);
     //第二步 计算mAp
-
+    //构造map_cal
+    mAP_cal* map_cal = new mAP_cal(netparam, weights);
+    map_cal->mAP_calc();
     //第三步 输出模型
 }
